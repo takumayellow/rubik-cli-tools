@@ -1,0 +1,2 @@
+﻿kociemba==1.2.1
+pycuber==0.2.2
