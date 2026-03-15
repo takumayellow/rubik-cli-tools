@@ -3,6 +3,8 @@
 Rubik のスクランブル/解法を **全部 CLI** で回すツール。
 PowerShell スクリプト (`rubik.ps1`) から Python バックエンドを呼び出し、ランダムスクランブル生成・最適解法・フェイス状態からの復元など、ルービックキューブ操作をすべてターミナルで完結させます。
 
+> **注意**: PowerShell スクリプト（`rubik.ps1`）は **Windows 限定**です。Python スクリプトは各 OS で直接実行できます。
+
 ---
 
 ## 特徴
@@ -94,6 +96,21 @@ python overlay_solve.py
 # kociemba でスクランブルから直接解く
 python solve_with_kociemba_from_scramble.py "R U R' U'"
 ```
+
+---
+
+## Python スクリプト一覧
+
+| スクリプト | 説明 |
+|---|---|
+| `solve_facelets.py` | 54文字フェイス文字列から20手以内の解を求める（kociemba） |
+| `validate_facelets.py` | 54文字フェイス文字列の妥当性を検証し、解ける場合は解を表示 |
+| `solve_from_moves.py` | スクランブル手順の逆手順（復元手順）を生成 |
+| `solve_with_kociemba_from_scramble.py` | スクランブル手順から20手以内の解を求める（kociemba） |
+| `overlay_solve.py` | Webカメラ映像にステップを重ねて表示するオーバーレイ解法 |
+| `random_scramble_and_solve.py` | ランダムスクランブルを生成し自動で解く |
+
+> **注**: kociemba は最短手順を**保証しません**。God's Number（20手）以内の解を返します。
 
 ---
 
