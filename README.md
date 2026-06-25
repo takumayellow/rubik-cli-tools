@@ -1,153 +1,102 @@
-# rubik-cli-tools
+# rubik-solver
 
-Rubik のスクランブル/解法を **全部 CLI** で回すツール。
-PowerShell スクリプト (`rubik.ps1`) から Python バックエンドを呼び出し、ランダムスクランブル生成・最適解法・フェイス状態からの復元など、ルービックキューブ操作をすべてターミナルで完結させます。
+ルービックキューブのスクランブル・解法ツール。**ブラウザで動く Web アプリ** と **CLI** の両方を提供します。
 
-> **注意**: PowerShell スクリプト（`rubik.ps1`）は **Windows 限定**です。Python スクリプトは各 OS で直接実行できます。
+## Web アプリ
 
----
+GitHub Pages で公開中: **https://takumayellow.github.io/rubik-solver/**
 
-## 特徴
-
-| 機能 | 説明 |
+| 機能 | 内容 |
 |------|------|
-| ランダムスクランブル | 指定手数・シードでスクランブルを生成し自動解法まで実行 |
-| 任意スクランブル解法 | 手順文字列（例: `R U R' U'`）から最短解を求める |
-| フェイス文字列解法 | 54 文字の URFDLB 表現から現在の状態を復元して解く |
-| kociemba アルゴリズム | `kociemba` ライブラリによる 2 フェーズ最適解法 |
-| pycuber シミュレーション | `pycuber` でキューブ状態をシミュレート・検証 |
+| インタラクティブキューブ | 2D ネット表示 + CSS 3D プレビュー |
+| スクランブル | ランダム 20 手スクランブル |
+| 手動操作 | R/U/F/L/D/B + プライム・2 回転 (18 手全対応) |
+| 自動解法 | LBL (Layer-by-Layer) ソルバー、アニメーション付き |
+| ダークテーマ | レスポンシブ対応 |
 
----
+```
+web/
+├── index.html       # エントリーポイント
+├── cube-solver.js   # キューブモデル + LBL ソルバー
+├── cube-renderer.js # 2D ネット描画 + アニメーション
+├── app.js           # UI コントローラー
+└── style.css        # ダークテーマ CSS
+```
 
-## セットアップ
+## CLI ツール (Python / PowerShell)
 
-### 必要環境
+ターミナルでスクランブル生成・最適解法・フェイス状態から復元を行うツール群。
 
-- Python 3.8 以上
-- PowerShell 5.1 以上（Windows）または pwsh（macOS / Linux）
+> PowerShell スクリプト (`rubik.ps1`) は **Windows 限定**。Python スクリプトは各 OS で実行可能。
 
-### 初回セットアップ
+### セットアップ
 
 ```powershell
 .\rubik.ps1 init
 ```
 
-このコマンドが仮想環境の作成と依存パッケージのインストールを行います。
-手動でセットアップする場合:
+手動セットアップ:
 
 ```bash
-python -m venv .venv
-# Windows:
-.\.venv\Scripts\Activate.ps1
-# macOS/Linux:
-source .venv/bin/activate
-
+python -m venv .venv && source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-### requirements.txt
-
-```
-kociemba==1.2.1
-pycuber==0.2.2
-```
-
----
-
-## 使い方
-
-### ランダムスクランブル → 自動解法
+### 使い方
 
 ```powershell
+# ランダムスクランブル → 自動解法
 .\rubik.ps1 random
 .\rubik.ps1 random -len 25 -seed 123
-```
 
-### 任意スクランブルを解く
-
-```powershell
+# 任意スクランブルを解く
 .\rubik.ps1 solve -scramble "R U R' U' F2 L D2"
-```
 
-### 54文字フェイス（URFDLB）から解く
-
-```powershell
+# 54 文字フェイス文字列から解く
 .\rubik.ps1 facelets -state UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
 ```
 
-### Python スクリプトを直接実行する場合
-
 ```bash
-# ランダムスクランブルと解法
+# Python スクリプトを直接実行
 python random_scramble_and_solve.py
-
-# 任意スクランブルから解く
 python solve_from_moves.py "R U R' U' F2 L D2"
-
-# フェイス文字列から解く
 python solve_facelets.py UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
-
-# フェイス文字列を検証する
-python validate_facelets.py UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB
-
-# オーバーレイ付き解法（ビジュアル表示）
-python overlay_solve.py
-
-# kociemba でスクランブルから直接解く
-python solve_with_kociemba_from_scramble.py "R U R' U'"
+python overlay_solve.py   # Webカメラ + オーバーレイ表示
 ```
 
----
-
-## Python スクリプト一覧
+### Python スクリプト一覧
 
 | スクリプト | 説明 |
-|---|---|
-| `solve_facelets.py` | 54文字フェイス文字列から20手以内の解を求める（kociemba） |
-| `validate_facelets.py` | 54文字フェイス文字列の妥当性を検証し、解ける場合は解を表示 |
-| `solve_from_moves.py` | スクランブル手順の逆手順（復元手順）を生成 |
-| `solve_with_kociemba_from_scramble.py` | スクランブル手順から20手以内の解を求める（kociemba） |
-| `overlay_solve.py` | Webカメラ映像にステップを重ねて表示するオーバーレイ解法 |
+|-----------|------|
 | `random_scramble_and_solve.py` | ランダムスクランブルを生成し自動で解く |
+| `solve_from_moves.py` | スクランブル手順の逆手順を生成 |
+| `solve_facelets.py` | 54 文字フェイス文字列から 20 手以内の解を求める |
+| `solve_with_kociemba_from_scramble.py` | スクランブル手順から kociemba で解く |
+| `validate_facelets.py` | フェイス文字列の妥当性を検証 |
+| `overlay_solve.py` | Webカメラ映像にステップを重ねて表示 |
 
-> **注**: kociemba は最短手順を**保証しません**。God's Number（20手）以内の解を返します。
-
----
+> kociemba は最短手順を保証しません。God's Number (20 手) 以内の解を返します。
 
 ## ファイル構成
 
 ```
-rubik-cli-tools/
-├── rubik.ps1                          # メインエントリーポイント（PowerShell）
-├── random_scramble_and_solve.py       # ランダムスクランブル + 解法
-├── solve_from_moves.py                # 手順文字列から解く
-├── solve_facelets.py                  # フェイス文字列から解く
-├── solve_with_kociemba_from_scramble.py  # kociemba で直接解法
-├── validate_facelets.py               # フェイス文字列の検証
-├── overlay_solve.py                   # オーバーレイ表示付き解法
-└── requirements.txt                   # Python 依存ライブラリ
+rubik-solver/
+├── web/                               # Web アプリ (GitHub Pages)
+│   ├── index.html
+│   ├── cube-solver.js
+│   ├── cube-renderer.js
+│   ├── app.js
+│   └── style.css
+├── rubik.ps1                          # CLI エントリーポイント (PowerShell)
+├── random_scramble_and_solve.py
+├── solve_from_moves.py
+├── solve_facelets.py
+├── solve_with_kociemba_from_scramble.py
+├── validate_facelets.py
+├── overlay_solve.py
+└── requirements.txt
 ```
-
----
-
-## フェイス文字列の表現形式
-
-54 文字の文字列で、各面（U/R/F/D/L/B）の 9 マスを左上から右下へ順に並べます。
-
-```
-UUUUUUUUU  = U面（上）の 9 マス
-RRRRRRRRR  = R面（右）の 9 マス
-FFFFFFFFF  = F面（前）の 9 マス
-DDDDDDDDD  = D面（下）の 9 マス
-LLLLLLLLL  = L面（左）の 9 マス
-BBBBBBBBB  = B面（後）の 9 マス
-```
-
-解いた状態（初期状態）は `UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB` です。
-
----
 
 ## ライセンス
 
-個人・学習目的で公開しています。
-`kociemba` および `pycuber` ライブラリのライセンスはそれぞれのパッケージに準じます。
+個人・学習目的で公開しています。`kociemba` および `pycuber` ライブラリのライセンスはそれぞれのパッケージに準じます。
