@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rubik's Cube Solver</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-title">
+      <span class="cube-icon">⬛</span>
+      <h1>Rubik's Cube Solver</h1>
+    </div>
+    <div class="header-status">
+      <span id="solved-indicator" class="status-badge status-solved">✓ Solved</span>
+      <span id="move-counter" class="move-counter">Moves: 0</span>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- Cube display -->
+    <section class="cube-section">
+      <div id="cube-display" class="cube-display"></div>
+    </section>
+
+    <!-- Controls panel -->
+    <aside class="controls-panel">
+
+      <!-- Primary actions -->
+      <div class="action-buttons">
+        <button id="btn-scramble" class="btn btn-primary btn-large">
+          🔀 Scramble
+        </button>
+        <button id="btn-reset" class="btn btn-secondary btn-large">
+          ↺ Reset
+        </button>
+      </div>
+
+      <!-- Move buttons -->
+      <div class="move-section">
+        <h3 class="section-label">Moves</h3>
+        <div class="move-grid">
+          <div class="move-row" data-face="R">
+            <span class="face-label">R</span>
+            <button class="btn btn-move" data-move="R">R</button>
+            <button class="btn btn-move" data-move="R'">R'</button>
+            <button class="btn btn-move" data-move="R2">R2</button>
+          </div>
+          <div class="move-row" data-face="U">
+            <span class="face-label">U</span>
+            <button class="btn btn-move" data-move="U">U</button>
+            <button class="btn btn-move" data-move="U'">U'</button>
+            <button class="btn btn-move" data-move="U2">U2</button>
+          </div>
+          <div class="move-row" data-face="F">
+            <span class="face-label">F</span>
+            <button class="btn btn-move" data-move="F">F</button>
+            <button class="btn btn-move" data-move="F'">F'</button>
+            <button class="btn btn-move" data-move="F2">F2</button>
+          </div>
+          <div class="move-row" data-face="L">
+            <span class="face-label">L</span>
+            <button class="btn btn-move" data-move="L">L</button>
+            <button class="btn btn-move" data-move="L'">L'</button>
+            <button class="btn btn-move" data-move="L2">L2</button>
+          </div>
+          <div class="move-row" data-face="D">
+            <span class="face-label">D</span>
+            <button class="btn btn-move" data-move="D">D</button>
+            <button class="btn btn-move" data-move="D'">D'</button>
+            <button class="btn btn-move" data-move="D2">D2</button>
+          </div>
+          <div class="move-row" data-face="B">
+            <span class="face-label">B</span>
+            <button class="btn btn-move" data-move="B">B</button>
+            <button class="btn btn-move" data-move="B'">B'</button>
+            <button class="btn btn-move" data-move="B2">B2</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solve controls -->
+      <div class="solve-section">
+        <button id="btn-solve" class="btn btn-solve btn-large">
+          ⚙ Solve
+        </button>
+        <button id="btn-stop" class="btn btn-danger btn-large hidden">
+          ✕ Stop
+        </button>
+        <div id="solve-progress" class="solve-progress hidden">
+          <div class="progress-bar-wrap">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+          <span id="progress-text" class="progress-text">Step 0/0</span>
+        </div>
+      </div>
+
+      <!-- Solution panel -->
+      <div class="solution-panel">
+        <button class="collapsible-header" id="solution-toggle" aria-expanded="false">
+          <span>Solution</span>
+          <span class="collapse-arrow">▼</span>
+        </button>
+        <div id="solution-body" class="collapsible-body collapsed">
+          <div id="solution-content" class="solution-content">
+            <p class="no-solution">No solution computed yet.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Move history -->
+      <div class="history-panel">
+        <h3 class="section-label">Move History</h3>
+        <div id="move-history" class="move-history">
+          <p class="no-history">No moves yet.</p>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <script src="cube-solver.js"></script>
+  <script src="cube-renderer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
